@@ -1,11 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "frontpipe"
-version = "0.1.0"
-description = "Lean, config-first front-of-pipe ingestion system"
-requires-python = ">=3.10"
-
-[tool.setuptools]
-packages = ["frontpipe", "frontpipe.utils", "frontpipe.collectors"]
+version = "0.2.1"
+description = "Front-of-pipe ingestion orchestrator"
+authors = [{name="You"}]
+dependencies = ["pyyaml", "python-dateutil"]
+requires-python = ">=3.9"
 
 [project.optional-dependencies]
-dev = ["nbformat", "pytz", "python-dateutil"]
+dev = ["nbformat", "pytz"]
+
+[tool.setuptools]
+packages = ["frontpipe", "frontpipe.collectors", "frontpipe.utils"]

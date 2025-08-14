@@ -1,13 +1,21 @@
-# FrontPipe (lean data ingestion)
+# FrontPipe v2 (full)
 
-A minimal, **config-first**, idempotent ingestion runner that pulls files from email / (S)FTP / API,
-validates report dates, and drops them into `drop/Data Files/<YYYY-MM-DD>`.
+Key updates:
+- Outlook `.msg` save using **Unicode MSG** first, fallback to classic MSG.
+- Hardened `sanitize_subject` (handles `[External]`, slashes, Windows-invalid chars).
+- Non-demo orchestrator that dispatches to collectors and moves to `drop/Data Files/<YYYY-MM-DD>`.
+- Flexible date helpers.
+- **Per-feed mailbox/folder** in YAML.
+- Fast feed builder notebook.
 
-**Key ideas**
-- One YAML config drives everything (add feeds without writing code).
-- Cache → validate → atomic move to final folder.
-- Dynamic **master list** per target date + JSONL event log.
-- 05:25 AM HTML report email + local `runtime/status.html` dashboard.
-- Works from CLI **and** Jupyter (debug notebook included).
+## Install
+```bash
+pip install --no-deps -e ".[dev]"
+```
 
-> This repo ships *system skeleton + test harness*. Wire Outlook/FTP/API creds at work and extend collectors as needed.
+## Run
+```bash
+python scripts/run_frontpipe.py --config config/frontpipe.sample.yaml
+```
+
+Edit `config/frontpipe.sample.yaml` for your mailbox/folder/regex.

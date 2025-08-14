@@ -1,3 +1,1 @@
-"""
-frontpipe: lean, config-first ingestion system.
-"""
+__all__ = []
