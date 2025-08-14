@@ -1,0 +1,57 @@
+# Sample config (no secrets). Duplicate and edit at work as frontpipe.yaml
+target_date_rule: "prev_bizday_NY"   # or today_NY
+poll_interval_minutes: 20
+report_time_local: "05:25"
+
+feeds:
+  - counterparty: MS
+    stream: PB_Email_TwoFiles
+    channel: email
+    expected_patterns:
+      subject_regex: "MS PB Daily (?P<ymd>\d{8})"
+      # For cases requiring **two specific attachments**, list both regexes below.
+      required_attachments:
+        - "^MS_PB_Positions_(?P<ymd>\d{8})\.csv$"
+        - "^MS_PB_Margin_(?P<ymd>\d{8})\.csv$"
+    date_source: subject
+    report_date_format: "%Y%m%d"
+    arrival_window_local: "19:00-05:15"
+    test_ignore_arrival_window: true
+
+  - counterparty: MAC
+    stream: DailyZip_ExtractOne
+    channel: email
+    expected_patterns:
+      attachment_regex: "^MAC_.*\.zip$"
+      extract_only: "^MAC_TARGET_(?P<ymd>\d{8})\.csv$"
+    date_source: filename
+    report_date_format: "%Y%m%d"
+    arrival_window_local: "19:30-05:00"
+    test_ignore_arrival_window: true
+
+  - counterparty: GS
+    stream: Futures_SFTP
+    channel: sftp
+    expected_patterns:
+      filename_regex: "^GS_FUT_.*(?P<ymd>\d{8})\.csv$"
+    date_source: filename
+    report_date_format: "%Y%m%d"
+    arrival_window_local: "20:00-05:10"
+
+  - counterparty: JPM
+    stream: PortalLink
+    channel: portal
+    manual: true
+    note: "Email link triggers browser download. Manual for now."
+
+  - counterparty: NTC
+    stream: OTP_Portal
+    channel: portal
+    manual: true
+    note: "OTP to email; manual step until API available."
+
+  - counterparty: BBG
+    stream: ManualOnly
+    channel: manual
+    manual: true
+    note: "Paid automation not enabled."
